@@ -12,44 +12,38 @@ var dataset = dropdownMenu.property("value");
 
 
 // grab subject ID from dropdown menu
-var selectSubject = d3.select("#selDataset");
-var output = d3.select(".output");
-
 
 function popDropDown() {
     d3.json("samples.json").then(function(data){
-        console.log(data.names);
-        //console.log(data.names[subjectIndex]);
-        d3.select("#selDataset")
-            .data()
-            //.enter()
-            .append("option")
-            .attr("value", function(d){
-                return d;
-            })
-            .text(function(d){
-                return parseInt(d);
-            })
-    })
+        var population = data.names
+        console.log(population)
+        //var selectList = d3.select("#selDataset");
+        population.forEach(function(patient){
+            d3.select("#selDataset")
+                .append("option")
+                .text(patient);
+        });
+    });
 };
 
 
 
-/*
+d3.selectAll(".well").on("change", updatePage);
 // Function to handle input change
-function subjectChange(event) {
-  // grab the value of the input field
-  var inputText = d3.event.target.value;
+function updatePage() {
+    
+    // grab the value of the input field
+    var dropMenu = d3.selectAll("#selDataset").node();
 
-  // reverse the input string
-  var reversedInput = reverseString(inputText);
+    subjectIndex = dropMenu.id;
+    console.log(subjectIndex);
 
-  // Set the output text to the reversed input string
-  output.text(reversedInput);
-}
+    var dropMenuSelected = dropMenu.value;
+    console.log(dropMenuSelected);
 
-selectSubject.on("change", buildBarPlot);
-*/
+    updatePage.on("change", buildPlot);
+    updatePage.on("change", demoInfo);
+};
 
 
 
