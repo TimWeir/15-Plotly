@@ -1,34 +1,10 @@
 //const sampleFile = "samples.json";
 
-var subjectIndex = 0;
-
-
-
-
 
 function optionChanged(subjectIndex) {
     buildPlot(subjectIndex);
     demoInfo(subjectIndex);
 }
-
-/*
-d3.selectAll("#selDataset").on("change", updatePage);
-// Function to handle input change
-function updatePage() {
-    // grab the value of the input field
-    var dropMenu = d3.selectAll("#selDataset").node();
-    
-    //selectIndex = dropMenu.text;
-    //console.log(selectIndex);
-
-    var subjectIndex = dropMenu.value;
-    console.log(subjectIndex);
-    return subjectIndex;
-    
-    //buildPlot();
-    //demoInfo();
-};
-*/
 
 
 function buildPlot(patient) {
@@ -61,9 +37,9 @@ function buildPlot(patient) {
         Plotly.newPlot("bar", data, layout);
 
         d3.json("samples.json").then(function(data){
-            var bValues = data.samples[subjectIndex].sample_values;
-            var bLabels = data.samples[subjectIndex].otu_ids;
-            var bText =  data.samples[subjectIndex].otu_labels;
+            var bValues = graphData.sample_values;
+            var bLabels = graphData.otu_ids;
+            var bText =  graphData.otu_labels;
             
             var trace2 = {
                 x: bLabels,
@@ -74,17 +50,30 @@ function buildPlot(patient) {
                     color: bLabels,
                     size: bValues
                 }
-            }
-            ;
+            };
             
             data = [trace2];
     
             layout = {
-                title: `OTU ID Bubble Plot of ${patient}`
-                //"position": "bottom"
-            }
+                title: {text: `OTU ID Bubble Plot of ${patient}`,
+                position: "bottom center"}
+            };
     
             Plotly.newPlot("bubble", data, layout);
+            /* Guage chart code pending comepletion
+            var data = [
+                {
+                    domain: { x: [0, 1], y: [0, 1] },
+                    value: 270,
+                    title: { text: "Belly Button Scrubs per Week" },
+                    type: "indicator",
+                    mode: "gauge+number"
+                }
+            ];
+            
+            var layout = { width: 600, height: 500, margin: { t: 0, b: 0 } };
+            Plotly.newPlot("gauge", data, layout);
+            */
         })
     })
 };
@@ -105,9 +94,6 @@ function demoInfo(patient) {
     });
 };
 
-
-//buildPlot();
-//demoInfo();
 
 function init() {
     d3.json("samples.json").then(function(data){
